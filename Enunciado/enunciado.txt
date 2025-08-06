@@ -1,0 +1,6 @@
+Cual es el promedio ponderado de los estudiantes de cada grupo,dar la lista completa ordenada decostinuá para
+el carnet, "En un solo archivo"
+"Considere opcion 1, los archivos solo tienen un grupo a la vez"
+
+Efrain: Yo pienso que las 3 listas, son de los 2 grupos y el ultimo es la mezcla de los 2 para el orden de los archivos
+de los carnets descendientemente.
