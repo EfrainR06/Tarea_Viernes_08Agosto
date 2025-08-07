@@ -1,7 +1,7 @@
 //Efrain Retana & Daniel Villarroel Estructura de Datos UNA
 
 #include "archivo.h"
-
+#include <string.h>
 #include <functional>
 
 //Funciones del h
@@ -11,7 +11,8 @@
 //NOTA: Tuve que buscar una forma de mandar el bin a la carpeta Archivos
 //se estaba desviando a la carpeta del builder.
 //Lo unico raro seria como ver el char ruta que es un areglo de 256 caracteres para poder poner la ruta del guardado.
-// Y el snprintf que es para consturir hacia esa ruta que llamamos.
+// Y el snprintf que es para construir hacia esa ruta que llamamos.
+
 FILE *abrirArchivo(const char *nombreArchivo) {
     char ruta[256];
     snprintf(ruta, sizeof(ruta), "../Archivos/%s", nombreArchivo);
@@ -32,20 +33,45 @@ FILE *abrirArchivo(const char *nombreArchivo) {
 //%s	Cadena (char[])	scanf("%s", nombre);
 //%c	Caracter (char)	scanf(" %c", &letra);
 
-Archivo leerRegistro() {
+Archivo leerRegistro(const char* curso) {
     Archivo reg;
 
     printf("Ingrese el carnet: ");
     scanf("%d", &reg.carnet);
 
-    printf("Ingrese el curso (máx 9 letras): ");
-    scanf("%s", reg.curso); // No se pone & por que como es un arreglo [10] ya actua como un puntero entonces no hay que referenciarlo.
+    // printf("Ingrese el curso (máx 9 letras): ");
+    // scanf("%s", reg.curso); // No se pone & por que como es un arreglo [10] ya actua como un puntero entonces no hay que referenciarlo.
+
+    //Use para poder copiar de un curso a otro la función strncpy, la busque y su fucnion es esta
+    //prompt(Retanaefrain42@gmail.com):
+    //Strncpy copia una cantidad limitada de caracteres de una cadena a otra,
+    //evitando desbordamientos y asegurando que no se sobrapese el tamaño del
+    //destino. ideal para copiar strings de forma segura.
+
+    //Lo que hice fue un copy paste del formato char del nombre del curso al otro
+    // Esto debido a que cuando toque hacer el ordenamiento hay que ordenar por cursos
+    // el mejor promedio y tambien por grupo, entonces con facilidad ya lo tiene
+
+    strncpy(reg.curso, curso, sizeof(reg.curso));
+    reg.curso[sizeof(reg.curso) - 1] = '\0';
 
     printf("Ingrese la nota: ");
     scanf("%d", &reg.nota);
 
     printf("Ingrese el grupo: ");
     scanf("%d",&reg.grupo);
+
+    return reg;
+}
+
+Curso leerCurso(const char* curso) {
+    Curso reg;
+
+    strncpy(reg.curso, curso, sizeof(reg.curso));
+    reg.curso[sizeof(reg.curso)-1] = '\0';
+
+    printf("Ingrese los créditos del curso: ");
+    scanf("%d", &reg.credits);
 
     return reg;
 }
