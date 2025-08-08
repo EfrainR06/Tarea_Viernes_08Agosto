@@ -81,6 +81,10 @@ void esEscribirRegistro(FILE *archivo, Archivo reg) {
     fwrite(&reg, sizeof(Archivo),1,archivo);
 }
 
+void esEscribirCurso(FILE* archivo, Curso reg) {
+    fwrite(&reg, sizeof(Archivo), 1, archivo);
+}
+
 //Funcion para cerrar el archivo
 void cerrarArchivo(FILE *archivo) {
 
@@ -89,4 +93,41 @@ void cerrarArchivo(FILE *archivo) {
     }
 }
 
+void organizarArchivos(const char* nombreArchivo1, const char* nombreArchivo2) {
+    
+    FILE* A = abrirArchivo(nombreArchivo1);
+    FILE* B = abrirArchivo(nombreArchivo2);
+    FILE* Combinado = abrirArchivo("Combinado");
+    Archivo array[100];
+    int a = 0, b = 0, c;
 
+
+    Archivo archiA;
+    Archivo archiB;
+    Archivo archiC;
+
+
+    while (fread(&archiA, sizeof(Archivo), 1, A) == 1) {
+        a++;
+    }
+
+    while (fread(&archiB, sizeof(Archivo), 1, B) == 1) {
+        b++;
+    }
+
+    c = a + b;
+
+    for (int i = 0; i < c - 1; i++) {
+        for (int j = 0; j < c - 1 - i; j++) {
+            if (array[j].nota < array[j + 1].nota) {
+                archiC = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = archiC;
+            }
+        }
+    }
+
+    for (int i = 0; i < c; i++) {
+        esEscribirRegistro(Combinado, array[i]);
+    }
+}

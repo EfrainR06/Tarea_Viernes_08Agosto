@@ -36,4 +36,7 @@ void esEscribirRegistro(FILE * archivo, Archivo reg); // El write al registro, e
 
 void esEscribirCurso(FILE* archivo,Curso reg);
 void cerrarArchivo(FILE * archivo); //Ultimo cuadro (el cerrar Archivo);
+
+void organizarArchivos(const char* nombreArchivo1, const char* nombreArchivo2);
+
 #endif //ARCHIVO_H

@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 int main() {
+
+    //  Paso 1: Abrir y crear archivos para los grupos y cursos
     int numCursos;
     printf("Cuantos cursos desea ingresar? ");
     scanf("%d", &numCursos);
@@ -47,5 +49,10 @@ int main() {
     cerrarArchivo(archivoCursos);
 
     printf("\nTodos los grupos y cursos han sido guardados exitosamente.\n");
+
+    //  Paso 2: Ordenamiento de los archivos
+    //  Paso 2: Ordenamiento de los archivos
+    organizarArchivos("1group.bin", "2group.bin");
+
     return 0;
 }
