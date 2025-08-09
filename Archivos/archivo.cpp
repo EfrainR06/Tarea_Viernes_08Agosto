@@ -92,8 +92,8 @@ void cerrarArchivo(FILE *archivo) {
         fclose(archivo);
     }
 }
-
-void organizarArchivos(const char* nombreArchivo1, const char* nombreArchivo2) {
+//Dani si ve esto, cambie su metodo xddd
+void organizarArchivosDani(const char* nombreArchivo1, const char* nombreArchivo2) {
     
     FILE* A = abrirArchivo(nombreArchivo1);
     FILE* B = abrirArchivo(nombreArchivo2);
@@ -130,4 +130,91 @@ void organizarArchivos(const char* nombreArchivo1, const char* nombreArchivo2) {
     for (int i = 0; i < c; i++) {
         esEscribirRegistro(Combinado, array[i]);
     }
+}
+void organizarArchivosEfra(const char *nombreArchivo1, const char *nombreArchivo2) {
+    Archivo array[200];
+    int count = 0;
+
+    //Abrir archivos para leerlos
+    char ruta1[256], ruta2[256], rutaOut[256];
+    snprintf(ruta1, sizeof(ruta1),"../Archivos/%s", nombreArchivo1);
+    snprintf(ruta2, sizeof(ruta2), "../Archivos/%s", nombreArchivo2);
+    snprintf(rutaOut, sizeof(rutaOut), "../Archivos/Combinado.bin");
+
+    FILE * A = fopen(ruta1, "rb");
+    FILE * B = fopen(ruta2, "rb");
+    FILE * Combinado = fopen(rutaOut, "wb");
+    if (!A || !B || !Combinado) {
+        printf("Error abriendo archivos \n");
+        if (A) fclose(A);
+        if (B) fclose(B);
+        if (Combinado) fclose(Combinado);
+        return;
+    }
+    //Va a leer archivo 1 grupo 1.bin
+    while (fread(&array[count],sizeof(Archivo),1,A) == 1) {
+        count++;
+    }
+    //Va a leer archivo 2 grupo2.bin
+    while (fread(&array[count], sizeof(Archivo),1,B) == 1) {
+        count++;
+    }
+    //Sort by nota descending
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - 1 - i; j++) {
+            if (array[j].nota < array[j + 1].nota) {
+                Archivo temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+    //Escribe el orden grabado para tirarlo al output
+    for (int i = 0 ; i < count; i++) {
+        fwrite(&array[i],sizeof(Archivo),1,Combinado);
+    }
+    fclose(A);
+    fclose(B);
+    fclose(Combinado);
+}
+
+void imprimirLista(const char* archivo) {
+    char ruta[256];
+    snprintf(ruta, sizeof(ruta), "../Archivos/%s", archivo);
+    FILE* f = fopen(ruta, "rb");
+    if (!f) {
+        printf("No se pudo abrir el archivo %s\n", archivo);
+        return;
+    }
+
+    Archivo reg;
+    int i = 1;
+    printf("Lista de registros en %s:\n", archivo);
+    while (fread(&reg, sizeof(Archivo), 1, f) == 1) {
+        printf("Registro #%d:\n", i++);
+        printf("  Carnet: %d\n", reg.carnet);
+        printf("  Curso: %s\n", reg.curso);
+        printf("  Nota: %d\n", reg.nota);
+        printf("  Grupo: %d\n", reg.grupo);
+    }
+    fclose(f);
+}
+
+void imprimirCursos(const char* curso) {
+    char ruta[256];
+    snprintf(ruta, sizeof(ruta), "../Archivos/%s",curso);
+    FILE * f = fopen(ruta,"rb");
+    if (!f) {
+        printf(" No se pudo abrir el archivo %s\n", curso);
+        return;
+    }
+    Curso reg;
+    int i = 1;
+    printf("Lista de registros en %s:\n", curso);
+    while (fread(&reg, sizeof(Curso), 1, f) == 1) {
+        printf("Curso #%d:\n", i++);
+        printf("Curso: %s\n", reg.curso);
+        printf("Creditos: %d\n",reg.credits);
+    }
+    fclose(f);
 }
